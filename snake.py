@@ -7,7 +7,8 @@ import random
 GAME_SIZE = 400
 BLOCK_SIZE = GAME_SIZE / 40 # make smaller to slow
 SNAKE_COLOR = 100, 95, 255
-APPLE_COLOR = (205, 0, 85)
+APPLE_COLOR = (205, 0, 55)
+BACKGROUND_COLOR = (0, 55, 55) # dark green, called below
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -16,13 +17,13 @@ pygame.display.set_caption('SNAKE!')
 
 
 class Snake():
-    def __init__(self, xcor, ycor):
+    def __init__(self, xcor, ycor): #constructor ---called whenever instantaite class
         self.is_alive = True
         self.direction = "RIGHT" # can use "" or ''
         self.body = [(xcor, ycor), 
                      (xcor - BLOCK_SIZE, ycor),
                      (xcor - BLOCK_SIZE * 2, ycor)]
-    def show(self):
+    def show(self): # called whenever you call snake.show
         for body_part in self.body:
             pygame.draw.rect(game_display, (SNAKE_COLOR), pygame.Rect(body_part[0], body_part[1], BLOCK_SIZE, BLOCK_SIZE))
     def move(self):
@@ -51,18 +52,13 @@ class Snake():
         return False
 
 class Apple():
-    def __init__(self):
+    def __init__(self): #constructor for apple every time generated
         self.xcor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
         self.ycor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
     def show(self):
         pygame.draw.rect(game_display, (APPLE_COLOR), pygame.Rect(self.xcor, self.ycor, BLOCK_SIZE, BLOCK_SIZE))
 
-snake = Snake(BLOCK_SIZE * 5, BLOCK_SIZE * 5) #where snake starts
-apple = Apple()
-
-# Main Game Loop
-while snake.is_alive:
-
+def handle_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             snake.is_alive = False 
@@ -76,16 +72,24 @@ while snake.is_alive:
             elif event.key == pygame.K_DOWN:
                     snake.direction = "DOWN"
 
+snake = Snake(BLOCK_SIZE * 5, BLOCK_SIZE * 5) #where snake starts
+apple = Apple()
+
+# Main Game Loop
+while snake.is_alive:
+
+    handle_events() # when refactored moved event handling into its own method which we call right here
+
     game_display.blit(game_display, (0,0))
 
     snake.move()
     if snake.has_collided_with_wall():
-            snake.is_alive = False
+            snake.is_alive = False # kills snake if hits wall
 
     if snake.has_eaten_apple(apple):
-            apple = Apple()
+            apple = Apple() #instansiation of class here, creates new apple in random generated area from constructor
             
-    game_display.fill((0,50,50,)) # fills the screen with black, do not put after snake.show()
+    game_display.fill(BACKGROUND_COLOR) # fills the screen with dark green, do not put after snake.show() or else it will not show up. defined at top
     snake.show() # displays to screen
     apple.show()
 
