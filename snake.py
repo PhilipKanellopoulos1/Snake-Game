@@ -39,6 +39,20 @@ class Snake():
     def show(self): # called whenever you call snake.show
         for body_part in self.body:
             body_part.show()
+
+    def set_direction_right(self):
+        if self.direction != "LEFT":
+            self.direction = "RIGHT"
+    def set_direction_left(self):
+        if self.direction != "RIGHT":
+            self.direction = "LEFT"
+    def set_direction_up(self):
+        if self.direction != "DOWN":
+            self.direction = "UP"
+    def set_direction_down(self):
+        if self.direction != "UP":
+            self.direction = "DOWN"
+
     def move(self):
         head_xcor = self.body[0].xcor # the array part of this grabs index 0 on line 30 self.body
         head_ycor = self.body[0].ycor
@@ -78,19 +92,19 @@ class Apple():
     def show(self):
         self.body.show()
 
-def handle_events():
+def handle_events(): # all method calls get ()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             snake.is_alive = False 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                snake.direction = "LEFT"
+                snake.set_direction_left()
             elif event.key == pygame.K_RIGHT:
-                snake.direction = "RIGHT"
+                snake.set_direction_right()
             elif event.key == pygame.K_UP:
-                    snake.direction = "UP"
+                snake.set_direction_up()
             elif event.key == pygame.K_DOWN:
-                    snake.direction = "DOWN"
+                snake.set_direction_down()
 
 snake = Snake(BLOCK_SIZE * 5, BLOCK_SIZE * 5) #where snake starts
 apple = Apple()
