@@ -32,6 +32,9 @@ class Snake():
         self.body = [Game_Object(xcor, ycor, SNAKE_COLOR), 
                      Game_Object(xcor - BLOCK_SIZE, ycor, SNAKE_COLOR),
                      Game_Object(xcor - BLOCK_SIZE * 2, ycor, SNAKE_COLOR)]
+        self.previous_last_tail = self.body[len(self.body) - 1]
+    def grow(self):
+        self.body.append(self.previous_last_tail)
     def show(self): # called whenever you call snake.show
         for body_part in self.body:
             body_part.show()
@@ -48,7 +51,7 @@ class Snake():
             head_ycor = head_ycor + BLOCK_SIZE
 
         self.body.insert(0, Game_Object(head_xcor, head_ycor, SNAKE_COLOR))
-        self.body.pop()
+        self.previous_last_tail = self.body.pop() # saves the last position of the tail
     def has_collided_with_wall(self):#these names need to be real specific
         head = self.body[0]
         if head.xcor < 0 or head.ycor < 0 or head.xcor + BLOCK_SIZE > GAME_SIZE or head.ycor + BLOCK_SIZE > GAME_SIZE:
@@ -97,6 +100,7 @@ while snake.is_alive:
             snake.is_alive = False # kills snake if hits wall
 
     if snake.has_eaten_apple(apple):
+            snake.grow()
             apple = Apple() #instansiation of class here, creates new apple in random generated area from constructor
             snake.score += 1
             
