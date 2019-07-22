@@ -62,6 +62,12 @@ class Snake():
         if head.xcor == apple_in_question.body.xcor and head.ycor == apple_in_question.body.ycor:
             return True
         return False
+    def has_collided_with_self(self):
+        head = self.body[0]
+        for i in range(1, len(self.body)):
+            if head.xcor == self.body[i].xcor and head.ycor == self.body[i].ycor: # this loop checks head x,y against every bodyparts x,y
+                return True
+        return False
 
 class Apple():
     def __init__(self): #constructor for apple every time generated
@@ -96,7 +102,7 @@ while snake.is_alive:
     game_display.blit(game_display, (0,0))
 
     snake.move()
-    if snake.has_collided_with_wall():
+    if snake.has_collided_with_wall() or snake.has_collided_with_self():
             snake.is_alive = False # kills snake if hits wall
 
     if snake.has_eaten_apple(apple):
