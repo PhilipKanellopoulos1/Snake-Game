@@ -13,7 +13,7 @@ BACKGROUND_COLOR = (0, 55, 55) # dark green, called below
 pygame.init()
 clock = pygame.time.Clock()
 game_display = pygame.display.set_mode((GAME_SIZE, GAME_SIZE))
-score_font = pygame.font.SysFont('Arial', 26, True) # font line, but not used here ==> main game loop
+score_font = pygame.font.SysFont('Arial', int(GAME_SIZE * 0.065), True) # font line, but not used here ==> main game loop
 pygame.display.set_caption('SNAKE!')
 
 class Game_Object(): # the third class made body of snake and apple
