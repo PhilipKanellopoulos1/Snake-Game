@@ -15,6 +15,13 @@ clock = pygame.time.Clock()
 game_display = pygame.display.set_mode((GAME_SIZE, GAME_SIZE))
 pygame.display.set_caption('SNAKE!')
 
+class Game_Object(): # the third class made body of snake and apple
+    def __init__(self, xcor, ycor, color): # self is python specific
+        self.xcor = xcor
+        self.ycor = ycor # these lines are essentially properties for Game_Object
+        self.color = color
+    def show(self):
+        pygame.draw.rect(game_display, self.color, pygame.Rect(self.xcor, self.ycor, BLOCK_SIZE, BLOCK_SIZE))
 
 class Snake():
     def __init__(self, xcor, ycor): #constructor ---called whenever instantaite class
@@ -47,16 +54,17 @@ class Snake():
         return False
     def has_eaten_apple(self, apple_in_question):
         head = self.body[0]
-        if head[0] == apple_in_question.xcor and head[1] == apple_in_question.ycor:
+        if head[0] == apple_in_question.body.xcor and head[1] == apple_in_question.body.ycor:
             return True
         return False
 
 class Apple():
     def __init__(self): #constructor for apple every time generated
-        self.xcor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
-        self.ycor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
+        xcor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
+        ycor = random.randrange(0, GAME_SIZE / BLOCK_SIZE) * BLOCK_SIZE
+        self.body = Game_Object(xcor, ycor, APPLE_COLOR)
     def show(self):
-        pygame.draw.rect(game_display, (APPLE_COLOR), pygame.Rect(self.xcor, self.ycor, BLOCK_SIZE, BLOCK_SIZE))
+        self.body.show()
 
 def handle_events():
     for event in pygame.event.get():
