@@ -21,21 +21,21 @@ class Game_Object(): # the third class made body of snake and apple
         self.ycor = ycor # these lines are essentially properties for Game_Object
         self.color = color
     def show(self):
-        pygame.draw.rect(game_display, self.color, pygame.Rect(self.xcor, self.ycor, BLOCK_SIZE, BLOCK_SIZE))
+        pygame.draw.rect(game_display, self.color, pygame.Rect(self.xcor, self.ycor, BLOCK_SIZE, BLOCK_SIZE)) # this line is the God Line and anytime we show something this gets used
 
 class Snake():
     def __init__(self, xcor, ycor): #constructor ---called whenever instantaite class
         self.is_alive = True
         self.direction = "RIGHT" # can use "" or ''
-        self.body = [(xcor, ycor), 
-                     (xcor - BLOCK_SIZE, ycor),
-                     (xcor - BLOCK_SIZE * 2, ycor)]
+        self.body = [Game_Object(xcor, ycor, SNAKE_COLOR), 
+                     Game_Object(xcor - BLOCK_SIZE, ycor, SNAKE_COLOR),
+                     Game_Object(xcor - BLOCK_SIZE * 2, ycor, SNAKE_COLOR)]
     def show(self): # called whenever you call snake.show
         for body_part in self.body:
-            pygame.draw.rect(game_display, (SNAKE_COLOR), pygame.Rect(body_part[0], body_part[1], BLOCK_SIZE, BLOCK_SIZE))
+            body_part.show()
     def move(self):
-        head_xcor = self.body[0][0]
-        head_ycor = self.body[0][1]
+        head_xcor = self.body[0].xcor # the array part of this grabs index 0 on line 30 self.body
+        head_ycor = self.body[0].ycor
         if self.direction == "RIGHT":
             head_xcor = head_xcor + BLOCK_SIZE
         elif self.direction == "LEFT":
@@ -43,18 +43,18 @@ class Snake():
         elif self.direction == "UP":
             head_ycor = head_ycor - BLOCK_SIZE 
         elif self.direction == "DOWN":
-            head_ycor = head_ycor + BLOCK_SIZE  
+            head_ycor = head_ycor + BLOCK_SIZE
 
-        self.body.insert(0, (head_xcor, head_ycor))
+        self.body.insert(0, Game_Object(head_xcor, head_ycor, SNAKE_COLOR))
         self.body.pop()
     def has_collided_with_wall(self):#these names need to be real specific
         head = self.body[0]
-        if head[0] < 0 or head[1] < 0 or head[0] + BLOCK_SIZE > GAME_SIZE or head[1] + BLOCK_SIZE > GAME_SIZE:
+        if head.xcor < 0 or head.ycor < 0 or head.xcor + BLOCK_SIZE > GAME_SIZE or head.ycor + BLOCK_SIZE > GAME_SIZE:
             return True
         return False
     def has_eaten_apple(self, apple_in_question):
         head = self.body[0]
-        if head[0] == apple_in_question.body.xcor and head[1] == apple_in_question.body.ycor:
+        if head.xcor == apple_in_question.body.xcor and head.ycor == apple_in_question.body.ycor:
             return True
         return False
 
