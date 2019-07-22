@@ -9,6 +9,7 @@ BLOCK_SIZE = GAME_SIZE / 40 # make smaller to slow
 SNAKE_COLOR = 100, 95, 255
 APPLE_COLOR = (205, 0, 55)
 BACKGROUND_COLOR = (0, 55, 55) # dark green, called below
+FRAMES_PER_SECOND = 10
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -118,6 +119,10 @@ while snake.is_alive:
     game_display.blit(score_text, (0,0)) # puts the score on the grid in top left at 0,0
 
     pygame.display.flip()
-    clock.tick(10) #slow down to make it slow
+
+    if snake.is_alive == False:
+        FRAMES_PER_SECOND = 0.3 # Pauses the game after death for a couple seconds
+
+    clock.tick(FRAMES_PER_SECOND) #slow down to make it slow
 
 pygame.quit()
